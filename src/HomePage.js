@@ -42,11 +42,16 @@ const HomePage = () => {
 
             if (!response.ok) throw new Error('Failed to generate duty file');
 
+            const contentType = response.headers.get('Content-Type');
             const blob = await response.blob();
-            const url = window.URL.createObjectURL(new Blob([blob]));
+            const url = window.URL.createObjectURL(blob);
+            
+            const extension = contentType === 'application/zip' ? 'zip' : 'xlsx';
+            const filename = `DutySheet_${startDate.toISOString().slice(0, 10)}_to_${endDate.toISOString().slice(0, 10)}.${extension}`;
+            
             const link = document.createElement('a');
             link.href = url;
-            link.setAttribute('download', 'DutySheet.xlsx');
+            link.setAttribute('download', filename);
             document.body.appendChild(link);
             link.click();
             link.remove();
