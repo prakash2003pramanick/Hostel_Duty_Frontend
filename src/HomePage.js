@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 import './HomePage.css';
 
 const HomePage = () => {
     const [hostels, setHostels] = useState(['Group 1']);
-    const [month, setMonth] = useState('');
-    const [year, setYear] = useState('');
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
     const [hostelType, setHostelType] = useState("BOY'S");
 
     const handleAddHostel = () => setHostels([...hostels, `Group ${hostels.length + 1}`]);
@@ -19,12 +21,17 @@ const HomePage = () => {
     };
 
     const handleGenerateDuty = async () => {
-        if (!month || !year || hostels.some((h) => !h)) {
+        if (!startDate || !endDate || hostels.some((h) => !h)) {
             alert('Please fill all fields.');
             return;
         }
 
-        const dutyData = { hostels, month, year, hostelType };
+        const dutyData = {
+            hostels,
+            startDate,
+            endDate,
+            hostelType,
+        };
 
         try {
             const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/duty/assign_duty`, {
@@ -50,9 +57,6 @@ const HomePage = () => {
         }
     };
 
-    const currentYear = new Date().getFullYear();
-    const years = [currentYear, currentYear + 1, currentYear + 2, currentYear + 3];
-
     return (
         <div className="container">
             <h1>Duty Assignment System</h1>
@@ -66,11 +70,9 @@ const HomePage = () => {
                             value={hostel}
                             onChange={(e) => handleHostelChange(index, e.target.value)}
                         />
-                        {/* Show the Add button only for the first hostel */}
                         <button onClick={handleAddHostel} className="add-hostel-btn">
                             <i className="fas fa-plus"></i>
                         </button>
-                        {/* Show the Delete button for all except the first input */}
                         {index !== 0 && (
                             <button className="delete-btn" onClick={() => handleRemoveHostel(index)}>
                                 <i className="fas fa-trash-alt"></i>
@@ -82,23 +84,26 @@ const HomePage = () => {
 
             <div className="form-row">
                 <div className="form-group half-width">
-                    <label>Month</label>
-                    <select value={month} onChange={(e) => setMonth(e.target.value)} className="custom-select">
-                        <option value="">Select Month</option>
-                        {['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'].map((val, i) => (
-                            <option key={val} value={val}>{new Date(0, i).toLocaleString('default', { month: 'long' })}</option>
-                        ))}
-                    </select>
+                    <label>Start Date</label>
+                    <DatePicker
+                        selected={startDate}
+                        onChange={(date) => setStartDate(date)}
+                        dateFormat="yyyy-MM-dd"
+                        className="custom-select"
+                        placeholderText="Select Start Date"
+                    />
                 </div>
 
                 <div className="form-group half-width">
-                    <label>Year</label>
-                    <select value={year} onChange={(e) => setYear(e.target.value)} className="custom-select">
-                        <option value="">Select Year</option>
-                        {years.map((yr) => (
-                            <option key={yr} value={yr}>{yr}</option>
-                        ))}
-                    </select>
+                    <label>End Date</label>
+                    <DatePicker
+                        selected={endDate}
+                        onChange={(date) => setEndDate(date)}
+                        dateFormat="yyyy-MM-dd"
+                        className="custom-select"
+                        placeholderText="Select End Date"
+                        minDate={startDate}
+                    />
                 </div>
 
                 <div className="form-group half-width">
