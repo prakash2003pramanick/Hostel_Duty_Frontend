@@ -1,23 +1,33 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
+import HomePage from './HomePage';
+import UploadPage from './UploadPage';
 import './App.css';
 
 function App() {
+  const [activeTab, setActiveTab] = useState('home');
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app-container">
+      <div className="main-box">
+        <div className="tab-bar">
+          <button
+            className={`tab-button ${activeTab === 'home' ? 'active' : ''}`}
+            onClick={() => setActiveTab('home')}
+          >
+            Home
+          </button>
+          <button
+            className={`tab-button ${activeTab === 'upload' ? 'active' : ''}`}
+            onClick={() => setActiveTab('upload')}
+          >
+            Upload Faculty Data
+          </button>
+        </div>
+
+        <div className="tab-content">
+          {activeTab === 'home' ? <HomePage /> : <UploadPage />}
+        </div>
+      </div>
     </div>
   );
 }
