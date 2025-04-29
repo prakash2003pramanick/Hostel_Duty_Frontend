@@ -61,7 +61,7 @@ const HomePage = () => {
         <div className="container">
             <h1>Duty Assignment System</h1>
 
-            <div className="form-group">
+            {/* <div className="form-group">
                 <label>Groups</label>
                 {hostels.map((hostel, index) => (
                     <div key={index} className="hostel-input">
@@ -80,7 +80,7 @@ const HomePage = () => {
                         )}
                     </div>
                 ))}
-            </div>
+            </div> */}
 
             <div className="form-row">
                 <div className="form-group half-width">

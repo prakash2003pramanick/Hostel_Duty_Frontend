@@ -10,9 +10,10 @@ const SettingPage = () => {
             try {
                 const res = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/settings`);
                 const data = await res.json();
+                console.log('Fetched settings:', data);
                 setSettings({
-                    boysHostel: data.boysHostel || 12,
-                    girlsHostel: data.girlsHostel || 5,
+                    boysHostel: data.settings.boysHostel || 12,
+                    girlsHostel: data.settings.girlsHostel || 5,
                 });
             } catch (err) {
                 setSettings({
