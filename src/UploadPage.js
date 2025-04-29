@@ -3,7 +3,7 @@ import './UploadPage.css';
 
 const UploadPage = () => {
   const [file, setFile] = useState(null);
-  const [action, setAction] = useState(''); // Track selected action
+  const [action, setAction] = useState('');
 
   const handleFileUpload = (e) => {
     const uploaded = e.target.files[0];
@@ -17,12 +17,12 @@ const UploadPage = () => {
     }
 
     const formData = new FormData();
-    formData.append('excelFile', file);  // Change 'file' to 'excelFile'
+    formData.append('excelFile', file);
 
     try {
       const res = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/upload/add_employee`, {
         method: 'POST',
-        body: formData,  // Send the file as FormData
+        body: formData,
       });
 
       if (res.ok) {
@@ -37,14 +37,13 @@ const UploadPage = () => {
   };
 
   const handleActionChange = (e) => {
-    setAction(e.target.value); // Update the selected action
+    setAction(e.target.value);
   };
 
   const getSampleFileLink = () => {
-    // Map actions to their sample file download links
     switch (action) {
       case 'add':
-        return process.env.PUBLIC_URL + '/add_faculty_sample.xlsx'; // Using PUBLIC_URL to get the correct path from the public folder
+        return process.env.PUBLIC_URL + '/add_faculty_sample.xlsx';
       case 'delete':
         return process.env.PUBLIC_URL + '/delete_faculty_sample.xlsx';
       case 'leave':
@@ -70,6 +69,7 @@ const UploadPage = () => {
 
       {action && (
         <div className="form-group">
+          <label>Sample File</label>
           <a href={getSampleFileLink()} download className="sample-link">
             Download Sample Excel for {action === 'add' ? 'Add Faculty' : action === 'delete' ? 'Delete Faculty' : 'Leave'}
           </a>
