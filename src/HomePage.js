@@ -25,13 +25,20 @@ const HomePage = () => {
             alert('Please fill all fields.');
             return;
         }
+        const formatDateToYMD = (date) => {
+            const y = date.getFullYear();
+            const m = String(date.getMonth() + 1).padStart(2, '0');
+            const d = String(date.getDate()).padStart(2, '0');
+            return `${y}-${m}-${d}`;
+        };
 
         const dutyData = {
             hostels,
-            startDate,
-            endDate,
+            startDate: formatDateToYMD(startDate), // e.g., '2025-05-01'
+            endDate: formatDateToYMD(endDate),
             hostelType,
         };
+
 
         try {
             const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/duty/assign_duty`, {
@@ -45,10 +52,10 @@ const HomePage = () => {
             const contentType = response.headers.get('Content-Type');
             const blob = await response.blob();
             const url = window.URL.createObjectURL(blob);
-            
+
             const extension = contentType === 'application/zip' ? 'zip' : 'xlsx';
             const filename = `DutySheet_${startDate.toISOString().slice(0, 10)}_to_${endDate.toISOString().slice(0, 10)}.${extension}`;
-            
+
             const link = document.createElement('a');
             link.href = url;
             link.setAttribute('download', filename);
